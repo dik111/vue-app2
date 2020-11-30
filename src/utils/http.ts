@@ -1,6 +1,6 @@
 import axios,{AxiosPromise,AxiosRequestConfig} from "axios";
 import baseURL from "@/api/env";
-import getCookie from "@/utils/cookies";
+import {getCookie} from "@/utils/cookies";
 // 自定义实例
 const ins =  axios.create({
     timeout:10000,
@@ -23,12 +23,12 @@ ins.interceptors.response.use(r =>{
 interface HttpType {
     (url:string,data ?:any,method?:any,config?:AxiosRequestConfig):AxiosPromise<any> | undefined
 }
-const http:HttpType= (url,data,method='GET',config)=>{
+const http:HttpType= (url,data,method='GET',config={
+    headers : {
+        'Content-Type' : 'application/x-www-form-urlencoded'}
+})=>{
     // config 就是数据请求所需要的其他配置
-    // @ts-ignore
-    const {headers = {
-        'Content-Type' : 'application/x-www-form-urlencoded'
-    }} = config
+    const {headers} = config
     switch (method.toUpperCase()) {
         case 'GET':
             return ins.get(url,{params:data})
